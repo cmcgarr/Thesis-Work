@@ -6,7 +6,7 @@ from pathlib import Path
 dirPath = Path.cwd().parents[0] / "Rocksteady" / "Data"
 
 def csvToJSON(filename):
-    # Create filepath
+    # Create filepath to csv
     filepath = dirPath / filename
     # Open the CSV
     file = Path.open(filepath, 'r' )
@@ -17,9 +17,9 @@ def csvToJSON(filename):
     out = json.dumps( [ row for row in reader ], sort_keys=True, indent=4, )
     print("JSON parsed!")
     print(out)
-    # Save the JSON
-    f = open( filename, 'w')
-    f.write(out)
+    # Save the JSON ---> create filepath to where we want json stored, if we want the json stored
+    # f = open( filename, 'w')
+    # f.write(out)
     return out
 
 def main():
