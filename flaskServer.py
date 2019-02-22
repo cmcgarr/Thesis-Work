@@ -1,5 +1,7 @@
 from flask import Flask
-#import Parser -- NEED TO GET NEW FILE FROM MASTER
+from flask import jsonify
+import Parser
+import datetime
 
 app = Flask(__name__)
 
@@ -21,11 +23,15 @@ def headlinesDT(datetime, tolerance):
 # Input[0]: datetime - of the form YYYY-MM-DDTHH:MM:SS.000Z
 # Input[1]: tolerance - timedelta value of number of minutes away from given datetime a value can be
 # Output[0]: returns JSON of all valid sentiment values
-@app.route('/sentiment/<datetime>/<tolerance>')
-def sentiment(datetime, tolerance):
+@app.route('/sentiment/<dateT>/<int:tolerance>')
+def sentiment(dateT, tolerance):
     result = 'WIP'
 
-    return result
+    tol = datetime.timedelta(minutes = tolerance)
+    dateT = Parser.parseDateTime(dateT)
+    result = Parser.filterJSON(dateT, tol)
+
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run(debug = True)

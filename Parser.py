@@ -21,17 +21,16 @@ def csvToJSON(filename):
     out = json.dumps( [ row for row in reader ], sort_keys=True, indent=4, )
     print("JSON parsed!")
     print(out)
-    # Save the JSON ---> create filepath to where we want json stored, if we want the json stored
-    writeToFile(out, JSON_PATH)
     return out
 
 # Input[0]: datetime object
 # Input[1]: datetime.timedelta object indicating tolerance
 # Output: json of valid sentiment values
 def filterJSON(dateT, tolerance):
+    print()
     file = open(JSON_PATH)
-    input_dict = json.loads(file)
-    output_dict = [x for x in input_dict if compareDateTime(parseDateTime(x['date']), dateT, tolerance) == 1]
+    input_dict = json.load(file)
+    output_dict = [x for x in input_dict if x.get('date') == "Date of First Article" or compareDateTime(parseDateTime(x.get('date')), dateT, tolerance) == 1]
     output_json = json.dumps(output_dict)
     return output_json
 
@@ -41,7 +40,7 @@ def filterJSON(dateT, tolerance):
 # Input[2]: time object indicating tolerance
 def compareDateTime(dateTime1, dateTime2, tolerance):
     result = False
-    if (datetime1 - datetime2) <= tolerance:
+    if (dateTime1 - dateTime2) <= tolerance:
         result = True
     return result
 
@@ -72,10 +71,10 @@ def contains(sentValue, content):
     length = len(content)
     result = false
 
-    while(i < length && result == false):
+    while(i < length and result == false):
         if(sentValue['date'] == content[i]['date']):
             result = true
-        i++
+        i += 1
 
     return result
 
