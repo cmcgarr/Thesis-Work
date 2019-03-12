@@ -7,13 +7,11 @@ let win
 
 function createWindow () {
     // Create the browser window
-    win = new BrowserWindow({ width: 250, height: 200})
+    win = new BrowserWindow({ width: 300, height: 300})
 
     // and load the index.html of the app
     win.loadFile('index.html')
-
-    // open the dev tools
-    win.webContents.openDevTools()
+    win.setMenuBarVisibility(false)
 
     // Emitted when the window is closed
     win.on('closed', () => {
