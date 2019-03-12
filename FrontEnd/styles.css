@@ -1,0 +1,46 @@
+.sentiment, .sentiment small {
+  background-color: white;
+  color: #404040;
+}
+
+.articles, .articles small {
+  background-color: black;
+  color: white;
+}
+
+html, body, .container-fluid {
+  height: 100%;
+}
+
+.row {
+  height: 50%;
+}
+
+.row > div {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.value {
+  padding-right: 5px;
+}
+
+/* Add a ( before the change */
+.change::before {
+  content: '(';
+}
+
+/* Add a ) after the change */
+.change::after {
+  content: ')';
+}
+
+/* Add a $ before the price */
+.value::before {
+}
+
+/* Hide the price and change when they are empty */
+.change:empty, .value:empty {
+  display: none;
+}
