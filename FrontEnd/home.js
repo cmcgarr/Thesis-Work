@@ -1,6 +1,7 @@
 
 const SENTIMENT_ADDRESS = "http://localhost:5000/sentiment/"
 const HEADLINES_ADDRESS = "http://localhost:5000/headlines/"
+const STEP_SIZE = 85
 
 //Desription:
 //input[0]: the type of data to be fetched - "sentiment" or "headlines" string
@@ -42,7 +43,20 @@ function updateStorage(new){
     sessionStorage.setItem('current', new)
 }
 
-function getColourValue(sentimentVal){}
+function getColourValue(sentimentVal){
+    var red = 255
+    var green = 0
+    //normalise to result is always positive
+    //assuming an upper and lower bound of +3/-3 for z-score
+    //outside this bound just take the highesst/lowest value
+    sentimentVal = sentimentVal + 3
+    var green = sentimentVal * STEP_SIZE
+    if (red > 255){
+        red = red - (green - 255)
+        green = green - 255
+    }
+    return rgb(red, green, 0)
+}
 
 function updateArticles(noArticles){
     var previousValue = sessionStorage.getItem('previous')
