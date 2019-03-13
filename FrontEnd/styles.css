@@ -1,11 +1,13 @@
 .sentiment, .sentiment small {
   background-color: white;
   color: #404040;
+  font-size: 1em;
 }
 
 .articles, .articles small {
   background-color: black;
   color: white;
+  font-size: 1em;
 }
 
 html, body, .container-fluid {
