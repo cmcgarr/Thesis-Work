@@ -7,7 +7,7 @@ let win
 
 function createWindow () {
     // Create the browser window
-    win = new BrowserWindow({ width: 300, height: 300})
+    win = new BrowserWindow({ width: 300, height: 300, resizable: false})
 
     // and load the index.html of the app
     win.loadFile('index.html')
@@ -25,7 +25,7 @@ function createWindow () {
 app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {
-    // On macOS it is common for applicaitons and their menu bar
+    // On macOS it is common for applications and their menu bar
     // to stay active until the user quits explicitly with CMD + q
     if (process.platform !== 'darwin'){
         app.quit()

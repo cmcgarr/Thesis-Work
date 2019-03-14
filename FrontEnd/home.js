@@ -2,6 +2,10 @@
 const SENTIMENT_ADDRESS = "http://localhost:5000/sentiment/"
 const HEADLINES_ADDRESS = "http://localhost:5000/headlines/"
 const STEP_SIZE = 85
+const TOLERANCE = 30
+const INTERVAL = 3000 //Miliseconds between hour progression
+
+var dateTime = new Date(2019, 02, 05, 0, 20, 0, 0)
 
 //Desription:
 //input[0]: the type of data to be fetched - "sentiment" or "headlines" string
@@ -46,16 +50,20 @@ function updateStorage(new){
 function getColourValue(sentimentVal){
     var red = 255
     var green = 0
+    //TODO -- UNDERFLOW AND OVERFLOW
     //normalise to result is always positive
     //assuming an upper and lower bound of +3/-3 for z-score
     //outside this bound just take the highesst/lowest value
     sentimentVal = sentimentVal + 3
-    var green = sentimentVal * STEP_SIZE
-    if (red > 255){
+    green = sentimentVal * STEP_SIZE
+    if (green > 255){
         red = red - (green - 255)
         green = green - 255
     }
-    return rgb(red, green, 0)
+    if (green < 0){
+        green = 0
+    }
+    return "rgb(" + red + "," + green + ",0)"
 }
 
 function updateArticles(noArticles){
@@ -84,13 +92,14 @@ function updateSentiment(sentimentVal){
     $("sentiment-value").text(sentimentVal.toLocaleString())
     $("sentiment-change").text(change)
   }
-}
 
 //Description:
 //input[0]:
 //input[1]:
-function main(type, date, time){
-    url = createURL(type, date, time)
+//input[2]:
+//input[3]:
+function execute(type, date, time, tolerance){
+    url = createURL(type, date, time, tolerance)
 
     $.getJSON(url, function (data){
         //update for when no articles published in that hour tf. no response
@@ -99,4 +108,16 @@ function main(type, date, time){
         updateArticles(data[1].noArticles)
         updateSentiment(data[1].positive)
     })
-}
+ }
+
+$(function(){
+    //code to executed when the DOM has loaded
+    execute("sentiment", [dateTime.getFullYear(), dateTime.getMonth(), dateTime.getDay], [dateTime.getHours(), dateTime.getMinutes(), dateTime.getSeconds()], TOLERANCE)
+})
+
+//execute this function every interval
+window.setInterval(function(){
+    var hours = dateTime.getHours() + 1
+    dateTime.setHours(hours)
+    execute("sentiment", [dateTime.getFullYear(), dateTime.getMonth(), dateTime.getDay], [dateTime.getHours(), dateTime.getMinutes(), dateTime.getSeconds()], TOLERANCE)
+}, INTERVAL);
