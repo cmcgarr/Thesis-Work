@@ -5,13 +5,21 @@
     <meta charset="utf-8">
     <title>Sentiment Tracker</title>
 
+
+
   <!-- Stylesheets -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./styles.css">
 
+    <!-- For working with jquery in electron -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
   <!-- Scripts -->
-    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src ="home.js"></script>
+
+    <!-- For working with jquery in electron -->
+    <script>if (window.module) module = window.module;</script>
 
 </head>
 <body>
@@ -21,8 +29,8 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
             <h1 class="articles">Articles <small>per hour</small></h1>
             <h2>
-                <span id="article-value" class = "value"</span>
-                <span id="article-change" class = "change"</span>
+                <span id="article-value" class = "value"></span>
+                <small id="article-change" class = "change"></small>
             </h2>
         </div>
     </div>
@@ -31,8 +39,8 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
             <h1 class="sentiment">Sentiment <small>average</small></h1>
             <h2>
-                <span id="sentiment-value" class = "value"</span>
-                <span id="sentiment-change" class = "value"</span>
+                <span id="sentiment-value" class = "value"></span>
+                <small id="sentiment-change" class = "change"></small>
             </h2>
         </div>
     </div>
