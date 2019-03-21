@@ -112,7 +112,6 @@ function updateArticles(noArticles){
     $("#article-change").text(change)
 }
 
-//REPEATED CODE
 function updateSentiment(sentimentVal){
     var previousValue
     var json = sessionStorage.getItem('previous')

@@ -1,0 +1,270 @@
+Term	Garda	Crime
+assault		Crime
+Garda	Garda	
+abduction		Crime
+rape		Crime
+homicide		Crime
+offence		Crime
+violation		Crime
+victim		Crime
+criminal		Crime
+Crime		Crime
+charge		Crime
+attack		Crime
+burglary		Crime
+murder		Crime
+molestation		Crime
+abuse		Crime
+kidnapping		Crime
+theft		Crime
+thief		Crime
+police	Garda	
+cops	Garda	
+speeding		Crime
+Gardaí	Garda	
+assassination		Crime
+assassin		Crime
+kill		Crime
+killing		Crime
+stab		Crime
+stabbing		Crime
+slander		Crime
+arson		Crime
+riot		Crime
+blackmail		Crime
+robbery		Crime
+treason		Crime
+terrorism		Crime
+mug		Crime
+perjury		Crime
+fraud		Crime
+forgery		Crime
+hijack		Crime
+carjack		Crime
+stalk		Crime
+shoplift		Crime
+shooting		Crime
+violence		Crime
+bribery		Crime
+smuggling		Crime
+officer	Garda	
+Garda síochána	Garda	
+Garda siochana	Garda	
+enforcement	Garda	
+detection	Garda	Crime
+prevention	Garda	Crime
+service	Garda	
+investigation	Garda	Crime
+emergency	Garda	Crime
+unit	Garda	
+offendor		Crime
+bloodshed		Crime
+carnage		Crime
+felony		Crime
+infraction		Crime
+transgression		Crime
+misdeed		Crime
+misconduct		Crime
+villainy		Crime
+wrongdoing		Crime
+scandal		Crime
+misdemeanor		Crime
+atrocity		Crime
+case		Crime
+evil		Crime
+lawless		Crime
+lawlessness		Crime
+illegal		Crime
+infringement		Crime
+criminality		Crime
+racket		Crime
+reserve	Garda	
+sergeant	Garda	
+inpector	Garda	
+superintendent	Garda	
+chief	Garda	
+deputy	Garda	
+commissioner	Garda	
+handcuffs	Garda	Crime
+cuffs	Garda	Crime
+constabulary	Garda	
+detective	Garda	
+CID	Garda	
+informer	Garda	
+armed	Garda	Crime
+intelligence	Garda	
+threat		Crime
+patrol	Garda	
+traffic	Garda	
+guard	Garda	
+guards	Garda	
+force	Garda	
+plain-clothes	Garda	
+plain-clothed	Garda	
+civic	Garda	
+jurisdiction	Garda	
+policing	Garda	
+constable	Garda	
+allegation		Crime
+lawsuit		Crime
+legal		Crime
+evidence	Garda	Crime
+accused	Garda	Crime
+arrest	Garda	Crime
+collusion		Crime
+gun		Crime
+station	Garda	
+justice	Garda	Crime
+inquiry	Garda	
+whistleblower	Garda	
+order	Garda	
+procedure	Garda	
+scene	Garda	Crime
+forensic	Garda	Crime
+ballistics	Garda	Crime
+discharged	Garda	
+regulation	Garda	
+incident		Crime
+drugs	Garda	Crime
+heroin		Crime
+meth		Crime
+cocaine		Crime
+security	Garda	
+ERU	Garda	
+NSU	Garda	
+surveillance	Garda	
+post-mortem	Garda	
+tamper		Crime
+court	Garda	Crime
+witness	Garda	Crime
+suspect	Garda	Crime
+custody	Garda	
+CSI	Garda	Crime
+parole		Crime
+inspectorate	Garda	
+policing	Garda	
+authority	Garda	
+authorities	Garda	
+law	Garda	
+penalty		Crime
+sanction	Garda	Crime
+sentence	Garda	Crime
+judgement		Crime
+judge		Crime
+ruling		Crime
+prison		Crime
+jail		Crime
+penitentiary		Crime
+prisoner		Crime
+Crimestopper	Garda	Crime
+vetting	Garda	
+drink-driving		Crime
+penal		Crime
+punitive		Crime
+manslaughter		Crime
+lynching		Crime
+copper	Garda	
+lawman	Garda	
+lawmen	Garda	
+prosecute		Crime
+prosecutor		Crime
+captain	Garda	
+cruiser	Garda	
+RMP	Garda	
+negligence		Crime
+threaten		Crime
+weapon		Crime
+damage		Crime
+bomb		Crime
+knife		Crime
+cannabis		Crime
+ecstasy		Crime
+ketamine		Crime
+crack		Crime
+methadone		Crime
+mephedrone		Crime
+LSD		Crime
+amphetamines		Crime
+deception		Crime
+legislation		Crime
+break-in		Crime
+heist		Crime
+piracy		Crime
+vandalism		Crime
+extortion		Crime
+embezzlement		Crime
+thievery		Crime
+looting		Crime
+stealing		Crime
+narcotic		Crime
+poison		Crime
+intrusion		Crime
+intruder		Crime
+raid	Garda	Crime
+invasion		Crime
+invader		Crime
+capture	Garda	
+imprisonment		Crime
+imprison		Crime
+incarcerate		Crime
+incarceration		Crime
+detention		Crime
+aggravated		Crime
+indecent		Crime
+explotation		Crime
+soliciting		Crime
+incest		Crime
+defile		Crime
+defilement		Crime
+possession		Crime
+trafficking		Crime
+grooming		Crime
+commit		Crime
+committed		Crime
+prosecution		Crime
+hate		Crime
+importune		Crime
+importuning		Crime
+harass		Crime
+harassment		Crime
+loitering		Crime
+prostitution		Crime
+prostitute		Crime
+barring	Garda	Crime
+protection	Garda	
+protect	Garda	
+gang		Crime
+fined	Garda	Crime
+fine	Garda	Crime
+scam		Crime
+defraud		Crime
+fraudulent		Crime
+cheat		Crime
+stolen		Crime
+unsolicited		Crime
+ non-consensual		Crime
+fake		Crime
+gangland		Crime
+underworld		Crime
+report	Garda	Crime
+inform	Garda	Crime
+fraudster		Crime
+destruction		Crime
+disturbance		Crime
+perpetrator		Crime
+killer		Crime
+libel		Crime
+spiked		Crime
+malicious		Crime
+vicious		Crime
+abusive		Crime
+drugged		Crime
+deceit		Crime
+deception		Crime
+hoax		Crime
+hustle		Crime
+con		Crime
+conman		Crime
+sting	Garda	
+operation	Garda	
+phishing		Crime
