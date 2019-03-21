@@ -14,8 +14,7 @@ def csvToJSON(filename):
     # Open the CSV
     file = Path.open(filepath, 'r' )
     # Give appropriate fieldnames to dictionary
-    reader = csv.DictReader( file, fieldnames = ( "title", "date", "noArticles", "terms", "positive", "negative",\
-                                                "active", "passive", "strong", "weak", "Econ@", "Polit", "Milit"))
+    reader = csv.DictReader(file)
     # Parse the CSV into JSON
     # the first element need not be transferred over after the original file has been created
     out = json.dumps( [ row for row in reader ], sort_keys=True, indent=4, )
@@ -48,17 +47,21 @@ def compareDateTime(dateTime1, dateTime2, tolerance):
 def parseHeadlines(data, time, tolerance):
     return
 
+def createJSONPath(filename):
+    return DIR_PATH / filename
+
 # Add new sentiment values to JSON file taking care not to duplicate
 # Input[0]: single sentValue element of form found in JSON doc
-# Input[1]: path of the tile to be loaded/altered
-def addToFile(sentValue, filename):
-    file = open(filename)
-    content = json.loads(file)
+# Input[1]: path of the file to be loaded/altered
+def addToFile(sentValue, filepath):
+    file = open(filepath)
+    content = json.load(file)
 
-    if(not contains(sentValue,file)):
+    if(not contains(sentValue,content)):
         content.append(sentValue)
 
-    writeToFile(content, filename)
+
+    writeToFile(content, filepath)
     return
 
 
@@ -95,14 +98,24 @@ def parseDateTime(string):
 
 # Description: writes given content to a given filepath location
 # Input[0]: content to be written
-# Input[0]: location to be written to
-def writeToFile(content, filename):
-    file = open(filename, "w")
+# Input[1]: filepath to be written to
+def writeToFile(content, filepath):
+    file = open(filepath, "w")
     file.write(content)
     return
 
+def appendJSON(jsonVar, filename):
+    for i in range (len(jsonVar)):
+        addToFile(jsonVar[i], filename)
+    return
+
 def main():
-    csvToJSON(sys.argv[1])
+    filename = sys.argv[1]
+    jsonVar = csvToJSON(filename)
+    if(Path(JSON_PATH).exists()):
+        appendJSON(jsonVar, JSON_PATH)
+    else:
+        writeToFile(jsonVar, JSON_PATH)
     print("done")
 
 if __name__ == '__main__':
