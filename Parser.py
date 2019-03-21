@@ -6,6 +6,21 @@ from pathlib import Path
 
 DIR_PATH = Path.cwd().parents[0] / "Rocksteady" / "Data"
 JSON_PATH = "JSON/JSON.json"
+NULL_JSON = {
+    "Econ@": "0",
+    "Milit": "0",
+    "Polit": "0",
+    "active": "0",
+    "date": "No Entries",
+    "negative": "0",
+    "noArticles": "0",
+    "passive": "0",
+    "positive": "0",
+    "strong": "0",
+    "terms": "0",
+    "title": "No Entries",
+    "weak": "0"
+}
 
 # Get JSON data from CSV file
 def csvToJSON(filename):
@@ -30,7 +45,9 @@ def filterJSON(dateT, tolerance):
     print()
     file = open(JSON_PATH)
     input_dict = json.load(file)
-    output_dict = [x for x in input_dict if x.get('date') == "Date of First Article" or compareDateTime(parseDateTime(x.get('date')), dateT, tolerance) == 1]
+    output_dict = [x for x in input_dict if x.get('date') == "Date of First Article" or compareDateTime(parseDateTime(x.get('date')), dateT, tolerance) == True]
+    if(len(output_dict) == 1):
+        output_dict.append(NULL_JSON)
     output_json = json.dumps(output_dict)
     return output_json
 
@@ -38,9 +55,10 @@ def filterJSON(dateT, tolerance):
 # Input[0]: datetime object
 # Input[1]: datetime object
 # Input[2]: time object indicating tolerance
+#TODO: PROBLEM AS IF DATETIME2 > DATETIME 1 CURRENTLY EVALUATES TO TRUE EVERY TIME ------ FIX
 def compareDateTime(dateTime1, dateTime2, tolerance):
     result = False
-    if (dateTime1 - dateTime2) <= tolerance:
+    if ((dateTime1 - dateTime2) <= tolerance and (dateTime2 - dateTime1) <= tolerance):
         result = True
     return result
 
@@ -101,6 +119,7 @@ def writeToFile(content, filename):
     file.write(content)
     return
 
+#update to append to file if file already exists
 def main():
     csvToJSON(sys.argv[1])
     print("done")
