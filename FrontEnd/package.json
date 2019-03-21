@@ -1,0 +1,23 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "UI for sentiment analyser",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmcgarr/Thesis-Work.git"
+  },
+  "author": "Ciarán McGarry",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cmcgarr/Thesis-Work/issues"
+  },
+  "homepage": "https://github.com/cmcgarr/Thesis-Work#readme",
+  "devDependencies": {
+    "electron": "^4.0.5"
+  }
+}
