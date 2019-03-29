@@ -1,16 +1,17 @@
 const { app, BrowserWindow } = require('electron')
+const { ipcMain } = require('electron')
 
 // keep a global reference of the window object, if you don't, the window
 // will be closed automatically when the JS object is garbage collected
 
 let win
+let childWin
 
-function createWindow () {
+function createWindow (filename) {
     // Create the browser window
     win = new BrowserWindow({ width: 300, height: 300, resizable: false})
-
-    // and load the index.html of the app
-    win.loadFile('index.html')
+    // and load the html file of the app
+    win.loadFile(filename)
     win.setMenuBarVisibility(true)
 
     // Emitted when the window is closed
@@ -22,7 +23,23 @@ function createWindow () {
     })
 }
 
-app.on('ready', createWindow)
+function createChildWindow(filename){
+    childWin = new BrowserWindow({width:600, height: 300, resizable: true, parent: win})
+
+    childWin.loadFile(filename)
+    childWin.setMenuBarVisibility(true)
+    childWin.setAlwaysOnTop(false)
+
+    //Emitted when the window is closed
+    childWin.on('closed', () =>{
+        // Dereference the window object
+        childWin = null
+    })
+}
+
+app.on('ready', () => {
+    createWindow('index.html')
+})
 
 app.on('window-all-closed', () => {
     // On macOS it is common for applications and their menu bar
@@ -36,9 +53,12 @@ app.on('activate', () => {
     // On macOS its common to recreate a window in the app when the
     // dock icon is clicked and there are no other windows open
     if (win === null) {
-        createWindow()
+        createWindow('index.html')
     }
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+ipcMain.on('infoClick', (event, arg) =>{
+    console.log('Info button clicked: opening info window')
+    createChildWindow('info.html')
+    event.sender.send('childID', childWin.webContents.id)
+})

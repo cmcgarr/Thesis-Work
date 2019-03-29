@@ -19,5 +19,8 @@
   "homepage": "https://github.com/cmcgarr/Thesis-Work#readme",
   "devDependencies": {
     "electron": "^4.0.5"
+  },
+  "dependencies": {
+    "electron-window-manager": "^1.0.6"
   }
 }

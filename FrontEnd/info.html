@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Sentiment Chart</title>
+
+
+
+  <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./styles.css">
+
+    <!-- For working with jquery in electron -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+  <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+    <script src="info.js"></script>
+
+
+    <!-- For working with jquery in electron -->
+    <script>if (window.module) module = window.module;</script>
+
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <canvas id="lineChart" class="chart"></canvas>
+    </div>
+
+</body>
+
+</html>

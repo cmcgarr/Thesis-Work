@@ -6,9 +6,26 @@ from pathlib import Path
 
 DIR_PATH = Path.cwd().parents[0] / "Rocksteady" / "Data"
 JSON_PATH = "JSON/JSON.json"
+NULL_JSON =         {
+        "Active": "0",
+        "Articles": "0",
+        "Crime": "0",
+        "Date of First Article": "NO ENTRIES",
+        "Econ@": "0",
+        "Garda": "0",
+        "Milit": "0",
+        "Negativ": "0",
+        "POLIT": "0",
+        "Passive": "0",
+        "Positiv": "0",
+        "Strong": "0",
+        "Terms": "0",
+        "Title": "NO ENTRIES",
+        "Weak": "0"
+    } # For responding to queries with no results
 
 # Get JSON data from CSV file
-def csvToJSON(filename):
+def csvToJSONString(filename):
     #Create filepath to csv
     filepath = DIR_PATH / filename
     # Open the CSV
@@ -19,7 +36,6 @@ def csvToJSON(filename):
     # the first element need not be transferred over after the original file has been created
     out = json.dumps( [ row for row in reader ], sort_keys=True, indent=4, )
     print("JSON parsed!")
-    print(out)
     return out
 
 # Input[0]: datetime object
@@ -29,8 +45,12 @@ def filterJSON(dateT, tolerance):
     print()
     file = open(JSON_PATH)
     input_dict = json.load(file)
-    output_dict = [x for x in input_dict if x.get('date') == "Date of First Article" or compareDateTime(parseDateTime(x.get('date')), dateT, tolerance) == 1]
-    output_json = json.dumps(output_dict)
+    output_dict = [x for x in input_dict if compareDateTime(parseDateTime(x.get('Date of First Article')), dateT, tolerance) == True]
+
+    if(len(output_dict) == 0):
+        output_dict.append(NULL_JSON)
+
+    output_json = json.dumps(output_dict, sort_keys=True, indent=4, )
     return output_json
 
 # Description: compares two datetime.datetime object with a certain datetime.timedelta tolerance and returns a boolean
@@ -39,31 +59,16 @@ def filterJSON(dateT, tolerance):
 # Input[2]: time object indicating tolerance
 def compareDateTime(dateTime1, dateTime2, tolerance):
     result = False
-    if (dateTime1 - dateTime2) <= tolerance:
+    if ((dateTime1 - dateTime2) <= tolerance and (dateTime2 - dateTime1) <= tolerance):
         result = True
     return result
 
-# TODO
+# TO BE EXTENDED FOR STRETCH GOAL OF IMPLEMENTING HEADLINES
 def parseHeadlines(data, time, tolerance):
     return
 
 def createJSONPath(filename):
     return DIR_PATH / filename
-
-# Add new sentiment values to JSON file taking care not to duplicate
-# Input[0]: single sentValue element of form found in JSON doc
-# Input[1]: path of the file to be loaded/altered
-def addToFile(sentValue, filepath):
-    file = open(filepath)
-    content = json.load(file)
-
-    if(not contains(sentValue,content)):
-        content.append(sentValue)
-
-
-    writeToFile(content, filepath)
-    return
-
 
 # Check whether a sentiment element is contained in the content of a json doc. Returning True if element is contained in content
 # Input[0]: sentiment value of form found in JSON doc
@@ -72,11 +77,11 @@ def addToFile(sentValue, filepath):
 def contains(sentValue, content):
     i = 0
     length = len(content)
-    result = false
+    result = False
 
-    while(i < length and result == false):
-        if(sentValue['date'] == content[i]['date']):
-            result = true
+    while(i < length and result == False):
+        if(sentValue.get('Date of First Article') == content[i]['Date of First Article']):
+            result = True
         i += 1
 
     return result
@@ -96,6 +101,20 @@ def parseDateTime(string):
     dateT = datetime.datetime(year, month, day, hour, minute, second)
     return dateT
 
+# Add new sentiment values to JSON file taking care not to duplicate
+# Input[0]: single sentValue element of form found in JSON doc
+# Input[1]: path of the file to be loaded/altered
+def addToFile(sentValue, filepath):
+    file = open(filepath)
+    content = json.load(file)
+
+    if(not contains(sentValue,content)):
+        content.append(sentValue)
+
+    out = json.dumps(content, sort_keys=True, indent=4, )
+    writeToFile(out, filepath)
+    return
+
 # Description: writes given content to a given filepath location
 # Input[0]: content to be written
 # Input[1]: filepath to be written to
@@ -106,13 +125,15 @@ def writeToFile(content, filepath):
 
 def appendJSON(jsonVar, filename):
     for i in range (len(jsonVar)):
+        print("trying: " + jsonVar[i].get('Date of First Article'))
         addToFile(jsonVar[i], filename)
     return
 
 def main():
     filename = sys.argv[1]
-    jsonVar = csvToJSON(filename)
+    jsonVar = csvToJSONString(filename)
     if(Path(JSON_PATH).exists()):
+        jsonVar = json.loads(jsonVar)
         appendJSON(jsonVar, JSON_PATH)
     else:
         writeToFile(jsonVar, JSON_PATH)
