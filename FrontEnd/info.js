@@ -37,11 +37,48 @@ function drawChart(){
 // get data sets w/ configurations
 function getDataSets(){
     var sampleDataSets = [{
-        label: "My First Dataset",
+        label: "Positive",
         data:  [1, 2, 1.8, 3, 2.2, 2, -2, -1.5, -1, 3, -.5, .5],
         fill: false,
         borderColor: 'Green'
-    }]
+    },
+    {
+        label: "Political",
+        data:  [1, 1.5, 1.3, 3, 2, 1.8, -2.2, 1.5, -.5, 2, -.2, -.8],
+        fill: false,
+        borderColor: 'Brown'
+    },
+    {
+        label: "Negative",
+        data:  [-1, -1.4, -2, -2.5, -1.8, 0, 1.8, 1.3, 1, -3, 1, 0],
+        fill: false,
+        borderColor: 'Red'
+    },
+    {
+        label: "Garda",
+        data:  [.5, 1, 0, .2, 1, -.6, -2, -1, 1, 3, -.5, .5],
+        fill: false,
+        borderColor: 'Blue'
+    },
+    {
+        label: "Crime",
+        data:  [.3, 1.1, 0, .2, .9, -.7, -2.2, -1.3, 1.1, 3.2, -.4, .7],
+        fill: false,
+        borderColor: 'Black'
+    },
+    {
+        label: "Strong",
+        data:  [.6, 1.5, -.1, -.5, 1, -.5, -1.8, -1, 1, 3, -.7, 1],
+        fill: false,
+        borderColor: 'Yellow'
+    },
+    {
+        label: "Weak",
+        data:  [-.6, -1, .5, .7, -1, 1, 2.2, 1, -1, -3.3, .7, 1],
+        fill: false,
+        borderColor: 'Grey'
+    }
+]
     return sampleDataSets
 }
 
