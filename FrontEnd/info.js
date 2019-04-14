@@ -1,25 +1,62 @@
 const { ipcRenderer } = require('electron')
 
-const LABELS = ["-11hr", "-10hr", "-9hr", "-8hr", "-7hr", "-6hr", "-5hr", "-4hr", "-4hr", "-2hr", "-1hr", "Now"]
-const INTERVAL = 3000
-let datasets = []
-//12hrs worth of sentiment values
-//to access: JSON_DATA[targetHR].relevantInfo
-var JSON_DATA = [{
-}]
+let lineChart
+const LABELS = ["-11days", "-10days", "-9days", "-8days", "-7days", "-6days", "-5days", "-4days", "-3days", "-2days", "-1days", "Today"]
+
+let datasets = [{
+    label: "Positive",
+    data:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    fill: false,
+    borderColor: 'Green'
+},
+{
+    label: "Political",
+    data:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    fill: false,
+    borderColor: 'Brown'
+},
+{
+    label: "Negative",
+    data:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    fill: false,
+    borderColor: 'Red'
+},
+{
+    label: "Garda",
+    data:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    fill: false,
+    borderColor: 'Blue'
+},
+{
+    label: "Crime",
+    data:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    fill: false,
+    borderColor: 'Black'
+},
+{
+    label: "Strong",
+    data:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    fill: false,
+    borderColor: 'Yellow'
+},
+{
+    label: "Weak",
+    data:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    fill: false,
+    borderColor: 'Grey'
+}
+]
 
 $(document).ready(function($){
     drawChart()
 })
 
 function drawChart(){
-    console.log(document.getElementById('lineChart'))
-
-    var lineChart = new Chart(document.getElementById('lineChart'), {
+    lineChart = new Chart(document.getElementById('lineChart'), {
         type: 'line',
         data: {
             labels: LABELS,
-            datasets: getDataSets()
+            datasets: datasets
         },
         options: {
         },
@@ -31,62 +68,33 @@ function drawChart(){
             }
         },
     });
-    //setInterval(updateDatasets, INTERVAL)
 }
 
 // get data sets w/ configurations
-function getDataSets(){
-    var sampleDataSets = [{
-        label: "Positive",
-        data:  [1, 2, 1.8, 3, 2.2, 2, -2, -1.5, -1, 3, -.5, .5],
-        fill: false,
-        borderColor: 'Green'
-    },
-    {
-        label: "Political",
-        data:  [1, 1.5, 1.3, 3, 2, 1.8, -2.2, 1.5, -.5, 2, -.2, -.8],
-        fill: false,
-        borderColor: 'Brown'
-    },
-    {
-        label: "Negative",
-        data:  [-1, -1.4, -2, -2.5, -1.8, 0, 1.8, 1.3, 1, -3, 1, 0],
-        fill: false,
-        borderColor: 'Red'
-    },
-    {
-        label: "Garda",
-        data:  [.5, 1, 0, .2, 1, -.6, -2, -1, 1, 3, -.5, .5],
-        fill: false,
-        borderColor: 'Blue'
-    },
-    {
-        label: "Crime",
-        data:  [.3, 1.1, 0, .2, .9, -.7, -2.2, -1.3, 1.1, 3.2, -.4, .7],
-        fill: false,
-        borderColor: 'Black'
-    },
-    {
-        label: "Strong",
-        data:  [.6, 1.5, -.1, -.5, 1, -.5, -1.8, -1, 1, 3, -.7, 1],
-        fill: false,
-        borderColor: 'Yellow'
-    },
-    {
-        label: "Weak",
-        data:  [-.6, -1, .5, .7, -1, 1, 2.2, 1, -1, -3.3, .7, 1],
-        fill: false,
-        borderColor: 'Grey'
-    }
-]
-    return sampleDataSets
-}
+function updateData(sentJSON){
+    datasets[0].data = getDataset(sentJSON, "Positiv")
+    datasets[1].data = getDataset(sentJSON, "POLIT")
+    datasets[2].data = getDataset(sentJSON, "Negativ")
+    datasets[3].data = getDataset(sentJSON, "Garda")
+    datasets[4].data = getDataset(sentJSON, "Crime")
+    datasets[5].data = getDataset(sentJSON, "Strong")
+    datasets[6].data = getDataset(sentJSON, "Weak")
 
-function parseDataSets(string){
+    lineChart.data.datasets = datasets
+    lineChart.update()
     return
 }
 
-var toggleVisibleHandler = function(e, legendItem){
+function getDataset(sentJSON, category){
+    var result = []
+    for(var i = 0; i < 12; i++){
+        result.push(sentJSON[i][category])
+    }
+    //we want to reverse the array so that current is last as the y axis moves from -12 to present
+    return result.reverse()
+}
+
+var toggleVisibleHandler = function(_, legendItem){
     var index = legendItem.datasetIndex;
     var ci = this.chart;
     var meta = ci.getDatasetMeta(index);
@@ -97,6 +105,8 @@ var toggleVisibleHandler = function(e, legendItem){
     ci.update();
 }
 
-ipcRenderer.on('Datasets', (event, dataPkg) => {
-    console.log(dataPkg)
+//receives JSON object of 12 sentiment value dictionaries
+//sends data on to chart updating functions
+ipcRenderer.on('Datasets', (_, dataPkg) => {
+    updateData(dataPkg);
 })

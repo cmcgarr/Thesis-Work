@@ -4,7 +4,7 @@ import sys
 import datetime
 from pathlib import Path
 
-DIR_PATH = Path.cwd().parents[0] / "Rocksteady" / "Data"
+DIR_PATH = Path.cwd().parents[0] / "Rocksteady" / "Data" / "day"
 JSON_PATH = "JSON/JSON.json"
 NULL_JSON =         {
         "Active": "0",

@@ -3,12 +3,13 @@ const { ipcRenderer } = require('electron')
 const SENTIMENT_ADDRESS = "http://localhost:5000/sentiment/"
 const HEADLINES_ADDRESS = "http://localhost:5000/headlines/"
 const STEP_SIZE = 85
-const TOLERANCE = 30
-const INTERVAL = 3000 //Miliseconds between hour progression
+const TOLERANCE = 0  //Minutes away from given datetime a sentiment element can be and still be considered relevant to query
+const INTERVAL = 3000 //Miliseconds between fetching of next data element to simulate the passage of time
 const FIRST_SENTIMENT_POSITION = 0
 
 //Starting date and time for demo/testing purposes
-var dateTime = new Date(2019, 02, 02, 6, 20, 0, 0)
+// (year, month, day, hour, min, sec, ms)
+var dateTime = new Date(2019, 01, 23, 0, 0, 0, 0)
 NULL_JSON =         [{
         "Active": "0",
         "Articles": "0",
@@ -34,7 +35,6 @@ NULL_JSON =         [{
 //input[2]: int tolerance value in mins
 function createURL(type, date, time, tolerance){
     var url = ""
-
     switch(type){
         case "sentiment":
             url = SENTIMENT_ADDRESS
@@ -45,7 +45,6 @@ function createURL(type, date, time, tolerance){
         default:
             break;
     }
-
     var datetime = createDateTimeString(date, time)
     url = url + datetime + "/" + tolerance
     return url
@@ -77,16 +76,10 @@ function pad(number){
 function getColourValue(sentimentVal){
     var red = 255
     var green = 0
-    //TODO -- UNDERFLOW AND OVERFLOW
-    //normalise to result is always positive
     //assuming an upper and lower bound of +3/-3 for z-score
-    //outside this bound just take the highesst/lowest value
+    //outside this bound just take the highest/lowest colour value
     normalised = sentimentVal + 3
     green = normalised * STEP_SIZE
-    //Testing purposes
-    console.log("Sentiment value: " + sentimentVal)
-    console.log("Normalised sentiment: " + normalised)
-    console.log("Green value: " + green)
 
     if (green > 255){
         red = red - (green - 255)
@@ -96,15 +89,15 @@ function getColourValue(sentimentVal){
         green = 0
     }
     var result = "rgb(" + red + "," + green + ",0)"
-
     console.log("Resulting RGB: " + result)
     return result
 }
 
-//REPEATED CODE
+// Consider combining updateArticles and updateSentiment into one function
 function updateArticles(noArticles){
-    var json = sessionStorage.getItem('previous')
+    var json = sessionStorage.getItem('previous0')
     var previousValue
+    console.log(json)
     //Handle case where no previous data has been stored and null is returned
     if (json !== null){
         json = JSON.parse(json)
@@ -113,21 +106,18 @@ function updateArticles(noArticles){
     else{
         previousValue = 0
     }
-
-    console.log("previous: " + previousValue)
     var change = noArticles - previousValue
     console.log("change type: " + typeof change + " value: " + change)
     if (change >= 0) {
       change = `+${change}`
     }
-
     $("#article-value").text(noArticles)
     $("#article-change").text(change)
 }
 
 function updateSentiment(sentimentVal){
     var previousValue
-    var json = sessionStorage.getItem('previous')
+    var json = sessionStorage.getItem('previous0')
     var colour = getColourValue(sentimentVal)
 
     $('.sentiment').css('background-color', colour);
@@ -148,7 +138,6 @@ function updateSentiment(sentimentVal){
     if (change >= 0) {
       change = `+${change}`
     }
-
     $("#sentiment-value").text(sentimentVal)
     $("#sentiment-change").text(change)
   }
@@ -160,7 +149,6 @@ function updateSentiment(sentimentVal){
 //input[3]:
 function execute(type, date, time, tolerance){
     url = createURL(type, date, time, tolerance)
-
     $.getJSON(url, function (data){
         //update for when no articles published in that hour tf. no response
         //save values in session for access across windows
@@ -185,57 +173,64 @@ jQuery(document).ready(function($){
 })
 
 //wait to receive ID of window to send Datasets to
-ipcRenderer.on('childID', (event, winId) => {
+ipcRenderer.on('childID', (_, winId) => {
     window.setInterval(function(){
         ipcRenderer.sendTo(winId, 'Datasets', getDataSets())
     }, INTERVAL)
 })
 
+// REVIEW -----------------------------------------------------------
+//Description:
+//Output[0]: Dataset of last 12 hrs worth of sentiment values
 function getDataSets(){
-    var datasets = sessionStorage.getItem('current')
-    console.log(datasets[FIRST_SENTIMENT_POSITION].Articles)
-    console.log('starting data set: ' + JSON.stringify(datasets))
+    var datasets = JSON.parse(sessionStorage.getItem('current'))
+
     for(var i = 0; i <= 10; i++){
         var target = 'previous' + i
         var sentVal = sessionStorage.getItem(target)
-        if(sentVal == null){
+        console.log("inital sent value: " + sentVal)
+        if(sentVal == null || sentVal == 'null'){
+            console.log("null sentVal detected")
             sentVal = NULL_JSON
-        }
+        } else { sentVal = JSON.parse(sentVal)}
+        //JSON is a list of dictionaries. Here we push the first relevant dicitionary to the datasets
+        console.log("Sentiment value: " + sentVal)
         datasets.push(sentVal[FIRST_SENTIMENT_POSITION])
     }
     return datasets
 }
 
-//Holds the last 12hrs worth of sentiment values
+//Holds the last 12 sentiment values as strings (as that is what they are initially received as and initial code was built around)
 //previous will get a value of null for the first execution -- HANDLE
 function updateStorage(next){
     var previous
-    // Move each stored sentiment value back one
-    for (var i = 10; i >= 0; i--){
+    // Move each stored sentiment value back one place
+    for (var i = 9; i >= 0; i--){
         var target = 'previous' + i
         previous = sessionStorage.getItem(target)
         target = 'previous' + (i+1)
         sessionStorage.setItem(target, previous)
     }
     previous = sessionStorage.getItem('current')
-    sessionStorage.setItem('previous', previous)
+    sessionStorage.setItem('previous0', previous)
     sessionStorage.setItem('current', next)
 }
 
-// initialise local storage with NULL_JSON entries so no null values
+// initialise local storage with Stringified NULL_JSON entries so no null values
   function initialiseSessionStorage(){
+      var filler = JSON.stringify(NULL_JSON)
       for (var i = 10; i >= 0; i--){
           var target = 'previous' + i
           target =  'previous' + (i+1)
-          sessionStorage.setItem(target, NULL_JSON)
+          sessionStorage.setItem(target, filler)
       }
-      sessionStorage.setItem('current', NULL_JSON)
+      sessionStorage.setItem('current', filler)
   }
 
 
 //execute this function every interval
 window.setInterval(function(){
-    var hours = dateTime.getHours() + 1
-    dateTime.setHours(hours)
+    var date = dateTime.getDate() + 1
+    dateTime.setDate(date)
     execute("sentiment", [dateTime.getFullYear(), dateTime.getMonth(), dateTime.getDate()], [dateTime.getHours(), dateTime.getMinutes(), dateTime.getSeconds()], TOLERANCE)
 }, INTERVAL);
