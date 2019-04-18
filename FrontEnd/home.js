@@ -142,15 +142,15 @@ function updateSentiment(sentimentVal){
     $("#sentiment-change").text(change)
   }
 
-//Description:
-//input[0]:
-//input[1]:
-//input[2]:
-//input[3]:
+//Description: Algortithm of execution for home.js backend
+//input[0]: the type of data to be requested from server: sentiment(implemented)/headlines(not implement)
+//input[1]: an array of [year, month, day] specifying the date of values to be requested
+//input[2]: an array of [hour, minute, seconds] specifying the time of values to be requested
+//input[3]: a tolerance integer specifying the allowed window of minutes away from the specified
+//          date and time a valid result may be
 function execute(type, date, time, tolerance){
     url = createURL(type, date, time, tolerance)
     $.getJSON(url, function (data){
-        //update for when no articles published in that hour tf. no response
         //save values in session for access across windows
         json = JSON.parse(data)
         console.log("No. Articles: " + json[FIRST_SENTIMENT_POSITION].Articles)
@@ -166,9 +166,6 @@ jQuery(document).ready(function($){
     execute("sentiment", [dateTime.getFullYear(), dateTime.getMonth(), dateTime.getDay()], [dateTime.getHours(), dateTime.getMinutes(), dateTime.getSeconds()], TOLERANCE)
     $('#infoBtn').click(function(){
         ipcRenderer.send('infoClick', 'Clicked')
-        //window.setInterval(function(){
-        //    ipcRenderer.send('Datasets', getDatasets())
-        //}, INTERVAL)
     })
 })
 

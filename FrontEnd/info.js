@@ -94,6 +94,7 @@ function getDataset(sentJSON, category){
     return result.reverse()
 }
 
+// Hides line relating to clicked legend item
 var toggleVisibleHandler = function(_, legendItem){
     var index = legendItem.datasetIndex;
     var ci = this.chart;
